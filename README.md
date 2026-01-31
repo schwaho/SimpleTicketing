@@ -79,9 +79,9 @@ pip install .[dev,utils]
 
 ### Command Line Interface (CLI)
 
-#### Wheel installation
+#### sdist installation
 
-After wheel installation, the `simpleticketing` command is available.
+After sdist installation, the `simpleticketing` command is available.
 
 Initialize a new instance:
 ```bash
