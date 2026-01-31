@@ -1,0 +1,46 @@
+.icon-form {
+    display: inline-flex;
+    flex-wrap: wrap;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-button svg {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    transition: transform var(--transition-base), color var(--transition-base);
+}
+
+.icon-button:hover {
+    background: none;
+}
+
+.icon-button:hover svg {
+    transform: translateY(-2px);
+}
+
+.icon-button.success {
+    color: var(--color-success);
+}
+
+.icon-button.warning {
+    color: var(--color-warning);
+}
+
+.icon-button.danger {
+    color: var(--color-danger);
+}
+
+.icon-button.inactive {
+    color: var(--color-inactive);
+}

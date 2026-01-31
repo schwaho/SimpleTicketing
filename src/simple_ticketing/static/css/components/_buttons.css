@@ -1,0 +1,23 @@
+button {
+    font-size: inherit;
+    background-color: var(--color-primary);
+    color: var(--color-primary-complement);
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    border-radius: var(--radius-small);
+    cursor: pointer;
+    transition: background-color var(--transition-slow);
+}
+
+button:hover {
+    background-color: var(--color-primary-dark);
+}
+
+button:focus {
+    background-color: var(--color-primary-dark);
+}
+
+button:active {
+    background-color: var(--color-primary-darker);
+}

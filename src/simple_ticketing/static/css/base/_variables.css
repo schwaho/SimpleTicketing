@@ -1,0 +1,81 @@
+:root {
+    /* General colors */
+    --color-primary: #009879;
+    --color-primary-dark: #00755c;
+    --color-primary-darker: #005f46;
+    --color-primary-complement: white;
+
+    --color-text: #333;
+    --color-text-light: #555;
+    --color-bg-light: #f4f6f8;
+    --color-bg-white: white;
+
+    --color-error-text: #721c24;
+    --color-error-bg: #f8d7da;
+    --color-error-border: #f5c6cb;
+
+    --color-success-text: #155724;
+    --color-success-bg: #d4edda;
+    --color-success-border: #c3e6cb;
+
+    --color-success: #28a745;
+    --color-success-dark: #218838;
+    --color-warning: orange;
+    --color-danger: #d9534f;
+    --color-inactive: gray;
+
+    --color-border: #ddd;
+
+    /* Typografie */
+    --font-family-base: 'Roboto', sans-serif;
+    --font-size-base: 16px;
+    --font-size-h1: 2.5rem;
+    --font-size-h2: 2rem;
+    --font-size-h3: 1.75rem;
+    --line-height-base: 1.5;
+
+    /* Sizes */
+    --radius-small: 5px;
+    --radius-medium: 10px;
+    --spacing-small: 10px;
+    --spacing-medium: 20px;
+    --spacing-large: 40px;
+
+    --icon-size: 24px;
+
+    /* Animations & Transitions */
+    --transition-base: 0.2s ease;
+    --transition-slow: 0.3s ease;
+
+    /* Effects */
+    --shadow-text: 2px 2px 4px rgba(0,0,0,0.3);
+    --shadow-box-small: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-box-medium: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-box-large: 0 8px 16px rgba(0,0,0,0.1);
+
+    /* Layout */
+    /* Breakpoints */
+    --breakpoint-mobile: 600px;
+    --breakpoint-tablet: 900px;
+
+    /* Main */
+    /*--content-max-width: 1200px;*/
+    --content-padding: var(--spacing-medium);
+
+    /* Header */
+    --header-bg-color: var(--color-primary);
+    --header-text-color: var(--color-primary-complement);
+
+    /* Navigation */
+    --nav-bg-color: var(--color-primary-dark);
+    --nav-link-color: var(--color-primary-complement);
+    --nav-link-hover-bg-color: var(--color-primary-darker);
+    --nav-link-padding: var(--spacing-small) var(--spacing-medium);
+
+    /* Table */
+    --table-border-color: var(--color-border);
+    --table-tr-hover-color: #f1f1f1;
+
+    /* Form */
+    --form-border-color: var(--color-border);
+}

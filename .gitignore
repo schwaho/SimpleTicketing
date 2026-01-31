@@ -1,0 +1,26 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Flask instance folder
+instance/
+
+# Utils
+utils/*
+!utils/*.py
+
+# Build artifacts
+/dist/
+build/
+*.egg-info/
+
+# Virtual environment
+.venv/
+venv/
+.tox
+
+# Coverage reports
+.coverage
+.coverage.*
+
+# MyPy type checker
+.mypy_cache/

@@ -1,0 +1,17 @@
+This product includes modified Material Symbols
+Copyright Google LLC
+Licensed under the Apache License, Version 2.0.
+Modifications by <schwaho / SimpleTicketing>.
+Full license text: see src/simple_ticketing/templates/svg/3rd_party/LICENSE-2.0.txt
+
+
+This product includes Roboto font
+Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)
+Licensed under the SIL Open Font License 1.1.
+Full license text: see src/simple_ticketing/static/fonts/3rd_party/OFL.txt
+
+
+This product includes html5-qrcode.min.js
+Copyright Minhaz
+Licensed under the Apache License, Version 2.0.
+Full license text: see src/simple_ticketing/static/js/3rd_party/LICENSE-2.0.txt

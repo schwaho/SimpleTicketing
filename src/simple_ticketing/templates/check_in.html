@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Check-in</h2>
+    <div class="form-container">
+        {% if use_github_version %}
+            <script src="https://github.com/mebjas/html5-qrcode/releases/download/v2.3.8/html5-qrcode.min.js"></script>
+        {% else %}
+            <script src="{{ url_for('static', filename='js/3rd_party/html5-qrcode.min.js') }}"></script>
+        {% endif %}
+        
+        <div id="qr-reader" class="qr-reader-box"></div>
+        
+        <div id="result" class="message"></div>
+
+        <audio id="valid-ticket-sound" src="{{ url_for('static', filename='sounds/valid_ticket.mp3') }}"></audio>
+        <audio id="invalid-ticket-sound" src="{{ url_for('static', filename='sounds/invalid_ticket.mp3') }}"></audio>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/check_in.js') }}"></script>
+{% endblock %}
+

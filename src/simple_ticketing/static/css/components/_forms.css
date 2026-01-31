@@ -1,0 +1,43 @@
+/* Formular-Design */
+.form-container {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--color-bg-white);
+    padding: 20px 30px;
+    margin: 30px auto;
+    border-radius: var(--radius-medium);
+    box-shadow: var(--shadow-box-medium);
+    text-align: center;
+    display: block;
+}
+
+form label {
+    font-weight: bold;
+    margin-bottom: var(--spacing-small);
+    display: inherit;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="number"],
+form select {
+    font-size: inherit;
+    width: 100%;
+    padding: var(--spacing-small) 15px;
+    margin-bottom: var(--spacing-medium);
+    border: 1px solid var(--form-border-color);
+    border-radius: var(--radius-small);
+    transition: border-color var(--transition-base);
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="number"]:focus,
+form select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+form button {
+    width: 100%;
+}

@@ -1,0 +1,13 @@
+{% macro icon(name, tooltip='', color='default', url=None, method='get') %}
+    {% if url %}
+        <form class="icon-form" action="{{ url }}" method="{{ method }}">
+            <button type="submit" class="icon-button {{ color }}" title="{{ tooltip }}">
+                {% include 'svg/3rd_party/' ~ name ~ '.svg' %}
+            </button>
+        </form>
+    {% else %}
+        <span class="icon {{ color }}" title="{{ tooltip }}">
+            {% include 'svg/3rd_party/' ~ name ~ '.svg' %}
+        </span>
+    {% endif %}
+{% endmacro %}

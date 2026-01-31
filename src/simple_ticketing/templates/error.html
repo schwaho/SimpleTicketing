@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="error-container">
+        <h1 class="error-code">Error {{ code }}</h1>
+        <p class="error-message">{{ message }}</p>
+        <a href="{{ url_for('frontend.index') }}" class="error-button">Back to the start page</a>
+    </div>
+{% endblock %}

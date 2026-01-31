@@ -1,0 +1,55 @@
+{% import "_icon.html" as ui %}
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>List of all removed tickets</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>EMail</th>
+                <th>Seat Type</th>
+                <th>Ticket Code</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.name }}</td>
+                <td>{{ ticket.email }}</td>
+                <td>{{ ticket.seat_type }}</td>
+                <td>{{ ticket.ticket_code }}</td>
+                <td>
+                    {{ ui.icon('created', tooltip=ticket.created_at, color='success') }}
+                    {% if ticket.paid_at %}
+                        {{ ui.icon('paid', tooltip=ticket.paid_at, color='success') }}
+                    {% else %}
+                        {{ ui.icon('not_paid', tooltip='Ticket not paid', color='default') }}
+                    {% endif %}
+                    {% if ticket.delivered_at %}
+                        {{ ui.icon('mail_sended', tooltip=ticket.delivered_at, color='success') }}
+                    {% else %}
+                        {{ ui.icon('mail_not_sended', tooltip='Ticket not sent', color='default') }}
+                    {% endif %}
+                    {% if ticket.check_in_at %}
+                        {{ ui.icon('checked_in', tooltip=ticket.check_in_at, color='success') }}
+                    {% else %}
+                        {{ ui.icon('not_checked_in', tooltip='Ticket not checked-in', color='default') }}
+                    {% endif %}
+                </td>
+                <td>
+                    {{ ui.icon('download', tooltip='Download single ticket', color='success',
+                        url=url_for('frontend.export_ticket', ticket_code=ticket.ticket_code), method='get') }}
+                        {{ ui.icon('unhide', tooltip='Restore Ticket', color='success',
+                        url=url_for('frontend.unhide_ticket', ticket_code=ticket.ticket_code), method='post') }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

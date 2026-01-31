@@ -1,0 +1,44 @@
+/* Container für Karten */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-medium);
+    padding: var(--spacing-medium);
+}
+
+/* Karten-Design */
+.card {
+    width: 100%;
+    max-width: 250px;
+    background-color: var(--color-bg-white);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--shadow-box-medium);
+    transition:
+        transform var(--transition-base),
+        box-shadow var(--transition-base);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-box-large);
+}
+
+.card a {
+    text-decoration: none;
+    display: block;
+    padding: var(--spacing-medium);
+    text-align: center;
+}
+
+.card a:hover h3 {
+    color: var(--color-primary-dark);
+}
+
+.card h3 {
+    margin: var(--spacing-small);
+}
+
+.card p {
+    color: var(--color-text-light);
+}

@@ -1,0 +1,36 @@
+/* Responsive Design */
+@media (max-width: var(--breakpoint-mobile)) {
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: var(--spacing-small) ;
+    }
+
+    nav a {
+        padding: var(--spacing-small) var(--spacing-medium);
+        width: 100%;
+        text-align: center;
+    }
+
+    main {
+        padding: var(--spacing-small);
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .form-container {
+        width: 100%;
+    }
+}
+
+@media (max-width: var(--breakpoint-tablet)) and (min-width: calc(var(--breakpoint-mobile) + 1px)) {
+    main {
+        padding: var(--spacing-small) var(--spacing-medium);
+    }
+}

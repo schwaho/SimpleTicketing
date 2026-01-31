@@ -1,0 +1,3 @@
+localization:
+  time_zone: "Europe/Berlin"
+  time_format: "%Y-%m-%d %H:%M:%S"

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card-container">
+        <div class="card">
+            <a href="{{ url_for('frontend.create_ticket_page') }}">
+                <h3>Create Tickets</h3>
+                <p>Create new tickets for your event.</p>
+            </a>
+        </div>
+
+        <div class="card">
+            <a href="{{ url_for('frontend.list_tickets_page') }}">
+                <h3>View all tickets</h3>
+                <p>See a list of all tickets stored in the system.</p>
+            </a>
+        </div>
+
+        <div class="card">
+            <a href="{{ url_for('frontend.list_hidden_tickets_page') }}">
+                <h3>View removed tickets</h3>
+                <p>Manage and restore removed tickets.</p>
+            </a>
+        </div>
+
+        <div class="card">
+            <a href="{{ url_for('frontend.check_in_page') }}">
+                <h3>Check-in</h3>
+                <p>Scan ticket codes for admission controll.</p>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+

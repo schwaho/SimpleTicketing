@@ -1,0 +1,89 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "SimpleTicketing"
+version = "0.1.0"
+description = "A simple ticketing system for non-profits"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE.txt", "3RD_PARTY_LICENSES.txt"]
+authors = [
+    { name = "schwaho", email = "194898364+schwaho@users.noreply.github.com" }
+]
+
+dependencies = [
+    "Flask",
+    "Flask-Mail",
+    "qrcode",
+    "Pillow",
+    "PyYAML",
+    "requests",
+    "cryptography",
+    "reportlab",
+    "beautifulsoup4",
+    "typer",
+    "dnspython",
+    "colorlog",
+    "python-dateutil",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "flake8",
+    "pylint",
+    "mypy",
+    "pytest",
+    "types-requests",
+    "types-PyYAML",
+    "types-python-dateutil",
+    "types-reportlab",
+    "types-qrcode",
+    "scipy-stubs; python_version >= '3.10'",
+]
+
+utils = [
+    "numpy",
+    "scipy",
+    "pydub",
+    "matplotlib",
+]
+
+[project.scripts]
+simpleticketing = "simple_ticketing.cli:app"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+simple_ticketing = [
+    "templates/**/*",
+    "static/**/*",
+    "examples/**/*",
+    "py.typed",
+]
+
+[tool.black]
+line-length = 100
+target_version = ["py39"]
+
+[tool.pylint.main]
+ignore = [".tox", ".git", "__pycache__"]
+
+[tool.mypy]
+python_version = 3.9
+strict = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"

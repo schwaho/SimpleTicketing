@@ -1,0 +1,20 @@
+.message {
+    margin-top: var(--spacing-medium);
+    padding: 15px;
+    border-radius: var(--radius-small);
+    display: none;
+}
+
+.message.success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+    border: 1px solid var(--color-success-border);
+    display: inherit;
+}
+
+.message.error {
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+    border: 1px solid var(--color-error-border);
+    display: inherit;
+}

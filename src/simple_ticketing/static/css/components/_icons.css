@@ -1,0 +1,20 @@
+.icon svg {
+    width: var(--icon-size);
+    height: var(--icon-size);
+}
+
+.icon.success {
+    color: var(--color-success);
+}
+
+.icon.warning {
+    color: var(--color-warning);
+}
+
+.icon.danger {
+    color: var(--color-danger);
+}
+
+.icon.default {
+    color: var(--color-inactive);
+}

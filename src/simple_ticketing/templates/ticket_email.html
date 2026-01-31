@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Event Tickets</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; padding: 20px;">
+
+    <!-- Greeting -->
+    <h1 class="greeting" style="text-align: center;">Hello {{ name }}!</h1>
+
+    <!-- Introductory text -->
+    <div class="intro-text">
+        <p>
+            Thank you for your purchase! Please find your event tickets attached.
+            You can either present the tickets directly on your mobile phone or print them as a PDF.
+            Instructions for both options can be found below.
+        </p>
+    </div>
+
+    <!-- Display ticket images -->
+    <div class="ticket-section">
+        {% for ticket_img_filename in ticket_img_filenames %}
+            <div class="ticket-container" style="margin-bottom: 20px; text-align: center;">
+                <p class="ticket-title">Ticket {{ loop.index }}</p>
+                <img class="ticket-image"
+                     src="cid:{{ ticket_img_filename }}"
+                     alt="{{ ticket_img_filename }}"
+                     style="max-width: 100%; height: auto; object-fit: contain; display: block; margin: 0 auto;">
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Instructions for using the tickets -->
+    <div class="instructions">
+        <h2>How to use your tickets</h2>
+
+        <!-- Mobile instructions -->
+        <div class="mobile-instructions">
+            <h3>1. Present on your mobile phone</h3>
+            <p>
+                Simply show the tickets above on your phone at the entrance.
+                Make sure the screen brightness is high enough so the QR code can be scanned properly.
+            </p>
+        </div>
+
+        <!-- PDF instructions -->
+        <div class="pdf-instructions">
+            <h3>2. Print your tickets</h3>
+            <p>
+                The tickets are also included as a PDF document attached to this email.
+                You can open the PDF file on your computer, tablet, or smartphone and print it.
+                To print the PDF file:
+            </p>
+            <ul class="print-steps">
+                <li>Open the attached PDF file using a PDF reader (e.g. Adobe Acrobat Reader).</li>
+                <li>Press <strong>Ctrl + P</strong> (Windows) or <strong>Command + P</strong> (Mac) to open the print dialog.</li>
+                <li>Select your desired printer.</li>
+                <li>Click <strong>Print</strong>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Closing message -->
+    <div class="closing-message">
+        <p>We hope you enjoy the event!</p>
+        <p>Kind regards,</p>
+        <p>Your Event Team</p>
+    </div>
+
+</body>
+</html>

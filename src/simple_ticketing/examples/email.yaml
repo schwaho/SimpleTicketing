@@ -1,0 +1,9 @@
+email:
+  mail_server: smtp.domain.de
+  mail_port: 465
+  mail_use_tls: false
+  mail_use_ssl: true
+  mail_username: user@domain.de
+  mail_password: hard_password
+  mail_sender_name: Users Event ticket system
+  mail_sender_email: tickets@domain.de

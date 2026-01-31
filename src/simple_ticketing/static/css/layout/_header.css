@@ -1,0 +1,11 @@
+header {
+    background-color: var(--header-bg-color);
+    padding: var(--spacing-medium) 0;
+    text-align: center;
+}
+
+.header-title {
+    color: var(--header-text-color);
+    text-shadow: var(--shadow-text);
+    margin: 0;
+}

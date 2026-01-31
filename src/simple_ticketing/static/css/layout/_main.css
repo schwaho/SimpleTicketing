@@ -1,0 +1,15 @@
+main {
+    max-width: var(--content-max-width);
+    padding: var(--content-padding);
+    margin: auto;
+}
+
+main h2::before, main h2::after,
+main h3::before, main h3::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: var(--color-primary); /* Line color */
+    margin: 10px auto;
+}

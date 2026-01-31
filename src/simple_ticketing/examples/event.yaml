@@ -1,0 +1,9 @@
+event:
+  event_title: "Saturday Night Fever"
+  ticket_line1: "Saturday, January 11, 2025 · 8:00 PM"
+  ticket_line2: "Venue: Community Center"
+  ticket_seat_line: "Seat: "
+  seat_types: 
+    - "Standing Area"
+    - "General Admission Seating"
+    - "Reserved Seating – usher-assigned"

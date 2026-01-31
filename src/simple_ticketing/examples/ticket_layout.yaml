@@ -1,0 +1,26 @@
+ticket_export:
+  img_width: 545
+  img_height: 1091
+  background_color: [255, 255, 255]
+  text_color: [0, 0, 0]
+  font_title: "Roboto-Black.ttf"
+  font_title_size: 48
+  font_text: "Roboto-Regular.ttf"
+  font_text_size: 24
+  font_misc_size: 14
+  border: 30
+  line_spacing: 10
+
+pdf_export:
+  page_size_name: A4
+  border: 30
+  rows: 3
+  cols: 2
+
+qr_code:
+  version: 1
+  error_correction: H
+  box_size: 10
+  border: 4
+  fill_color: black
+  back_color: white

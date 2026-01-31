@@ -1,0 +1,34 @@
+#qr-reader {
+    border: none !important;
+    width: 100%; 
+    margin: 0 auto;
+}
+
+#qr-reader .qr-reader-box {
+    width: 100%;
+    max-width: 500px;
+    height: 500px;
+    max-height: 100%;
+    margin: 20px auto;
+    display:block;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#qr-reader__scan_region {
+    border-radius: var(--radius-small) !important;
+    overflow: hidden !important;
+}
+
+.qr-reader-box button {
+    width: 100%;
+}
+
+.form-container.success {
+    background-color: var(--color-success);
+}
+
+.form-container.error {
+    background-color: var(--color-danger);
+}
