@@ -13,7 +13,10 @@ Features:
 import os
 import logging
 import sqlite3
-from typing import List, Tuple, Any, Dict, Optional
+import uuid
+from contextlib import contextmanager
+from contextvars import ContextVar
+from typing import List, Tuple, Any, Dict, Optional, Generator, Union
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +32,308 @@ COLUMN_DEFINITIONS = {
     "check_in_at": "DATETIME DEFAULT NULL",
     "hidden": "BOOLEAN DEFAULT FALSE",
 }
+
+_current_connection: ContextVar[Optional[sqlite3.Connection]] = ContextVar(
+    "current_db_connection",
+    default=None,
+)
+
+
+def open_connection(db_path: str) -> None:
+    """
+    Open a SQLite database connection and store it in the thread-local context.
+
+    Args:
+        db_path: Path to the SQLite database file.
+
+    Raises:
+        sqlite3.Error: If the connection cannot be established.
+    """
+    conn = sqlite3.connect(
+        db_path,
+        isolation_level=None,
+    )
+    conn.row_factory = sqlite3.Row
+    _current_connection.set(conn)
+
+
+def get_connection() -> sqlite3.Connection:
+    """
+    Retrieve the current SQLite database connection from the thread-local context.
+
+    Returns:
+        sqlite3.Connection: The active database connection.
+
+    Raises:
+        RuntimeError: If no connection has been initialized.
+    """
+    conn = _current_connection.get()
+    if conn is None:
+        raise RuntimeError("Database connection not initialized")
+    return conn
+
+
+def close_connection() -> None:
+    """
+    Close the current SQLite database connection and clear the thread-local context.
+
+    Does nothing if no connection is currently open.
+    """
+    conn = _current_connection.get()
+    if conn is not None:
+        conn.close()
+        _current_connection.set(None)
+
+
+@contextmanager
+def transaction() -> Generator[None, None, None]:
+    """
+    Execute multiple database operations atomically.
+
+    All statements executed within this context are part of a single
+    database transaction. If a transaction is already active on this
+    connection, a SAVEPOINT is used instead of BEGIN, allowing safe
+    nesting: only the outermost call actually commits or rolls back the
+    underlying transaction. If any exception is raised within the
+    context, the transaction (or savepoint) is rolled back and the
+    exception is re-raised unchanged. Otherwise, it is committed
+    (or released).
+
+    Raises:
+        sqlite3.DatabaseError: If committing, rolling back, or savepoint
+            handling fails.
+    """
+    conn = get_connection()
+    if conn.in_transaction:
+        savepoint = f"sp_{uuid.uuid4().hex}"
+        logger.debug("SAVEPOINT %s", savepoint)
+        conn.execute(f"SAVEPOINT {savepoint}")
+        try:
+            yield
+        except Exception:
+            logger.debug("ROLLBACK TO SAVEPOINT %s", savepoint)
+            conn.execute(f"ROLLBACK TO SAVEPOINT {savepoint}")
+            conn.execute(f"RELEASE SAVEPOINT {savepoint}")
+            raise
+
+        logger.debug("RELEASE SAVEPOINT %s", savepoint)
+        conn.execute(f"RELEASE SAVEPOINT {savepoint}")
+    else:
+        logger.debug("BEGIN TRANSACTION")
+        conn.execute("BEGIN")
+        try:
+            yield
+        except Exception:
+            logger.debug("ROLLBACK TRANSACTION due to an error")
+            conn.rollback()
+            raise
+
+        logger.debug("COMMIT TRANSACTION")
+        conn.commit()
+
+
+def execute(sql: str, params: Optional[Union[Tuple[Any, ...], Dict[str, Any]]] = None) -> None:
+    """Execute a single SQL statement without returning a result.
+
+    This function is the lowest-level execution primitive. It is responsible
+    for parameter binding, execution, error handling, and logging. It must not
+    encode any domain knowledge or assumptions about the queried data.
+
+    Args:
+        sql: The SQL statement to execute.
+        params: Optional positional or named parameters for the SQL statement.
+
+    Raises:
+        sqlite3.DatabaseError: If execution fails for any reason.
+    """
+    conn = get_connection()
+    try:
+        if params is not None:
+            logger.debug("Executing SQL: %s with params: %s", sql, params)
+            conn.execute(sql, params)
+        else:
+            logger.debug("Executing SQL: %s", sql)
+            conn.execute(sql)
+    except sqlite3.DatabaseError:
+        logger.exception("Database execution failed.")
+        raise
+
+
+def execute_many(sql: str, params: Union[List[Tuple[Any, ...]], List[Dict[str, Any]]]) -> None:
+    """Execute the same SQL statement multiple times with different parameters.
+
+    Intended for batch inserts or updates. This function does not implement
+    any domain-specific batching logic.
+
+    Args:
+        sql: The SQL statement to execute.
+        params: A list of parameter sets (positional or named) to apply to the SQL statement.
+
+    Raises:
+        sqlite3.DatabaseError: If execution fails for any reason.
+    """
+    if not params:
+        logger.debug("execute_many called with empty params list.")
+        return
+
+    conn = get_connection()
+    try:
+        logger.debug("Executing SQL many times: %s with %d parameter sets", sql, len(params))
+        conn.executemany(sql, params)
+    except sqlite3.DatabaseError:
+        logger.exception("Database batch execution failed.")
+        raise
+
+
+def execute_returning(
+    sql: str, params: Optional[Union[Tuple[Any, ...], Dict[str, Any]]] = None
+) -> Dict[str, Any]:
+    """Execute a single INSERT/UPDATE ... RETURNING ... statement and return the resulting row.
+
+    Intended for statements that end in "RETURNING *", so the full row
+    (including database-generated columns such as autoincrement ids or
+    default timestamps) can be mapped back onto a domain model. Does not
+    commit or manage transactions; that remains the caller's responsibility.
+
+    Args:
+        sql: The SQL statement, must contain a RETURNING clause.
+        params: Optional positional or named parameters for the SQL statement.
+
+    Returns:
+        The single row represented as a mapping, produced by the RETURNING clause.
+
+    Raises:
+        sqlite3.DatabaseError: If execution fails or no row was returned.
+    """
+    conn = get_connection()
+    try:
+        if params is not None:
+            logger.debug("Executing SQL (returning): %s with params: %s", sql, params)
+            cursor = conn.execute(sql, params)
+        else:
+            logger.debug("Executing SQL (returning): %s", sql)
+            cursor = conn.execute(sql)
+        row = cursor.fetchone()
+        if row is None:
+            raise sqlite3.DatabaseError("RETURNING clause produced no row.")
+    except sqlite3.DatabaseError:
+        logger.exception("Database execution (returning) failed.")
+        raise
+    return dict(row)
+
+
+def execute_returning_many(
+    sql: str, params: Union[List[Tuple[Any, ...]], List[Dict[str, Any]]]
+) -> List[Dict[str, Any]]:
+    """Execute the same INSERT/UPDATE ... RETURNING ... statement once per parameter set.
+
+    Python's sqlite3.Cursor.executemany() does not expose per-statement result
+    rows, so RETURNING cannot be combined with executemany(). This function
+    instead runs the statement once per parameter set on the same connection,
+    collecting the returned row each time. Does not commit or open an explicit
+    transaction; atomicity across the batch remains the caller's responsibility.
+
+    Args:
+        sql: The SQL statement, must contain a RETURNING clause.
+        params: A list of parameter sets (positional or named) to apply.
+
+    Returns:
+        A list of rows represented as mappings. The list may be empty.
+
+    Raises:
+        sqlite3.DatabaseError: If execution fails or a statement returns no row.
+    """
+    if not params:
+        logger.debug("execute_returning_many called with empty params list.")
+        return []
+    conn = get_connection()
+    rows: List[sqlite3.Row] = []
+    try:
+        logger.debug(
+            "Executing SQL many times (returning): %s with %d parameter sets", sql, len(params)
+        )
+        for single_params in params:
+            cursor = conn.execute(sql, single_params)
+            row = cursor.fetchone()
+            if row is None:
+                raise sqlite3.DatabaseError("RETURNING clause produced no row.")
+            rows.append(row)
+    except sqlite3.DatabaseError:
+        logger.exception("Database batch execution (returning) failed.")
+        raise
+    return [dict(row) for row in rows]
+
+
+def fetch_one(
+    sql: str, params: Optional[Union[Tuple[Any, ...], Dict[str, Any]]] = None
+) -> Optional[Dict[str, Any]]:
+    """Execute a SQL query and return a single row.
+
+    If the query yields no result, None is returned. If multiple rows are
+    returned by the query, only the first row is returned.
+
+    Args:
+        sql: The SQL SELECT statement to execute.
+        params: Optional positional or named parameters for the SQL statement.
+
+    Returns:
+        A single row represented as a mapping, or None if no row was found.
+
+    Raises:
+        sqlite3.DatabaseError: If execution fails for any reason.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        logger.debug("Executing SQL (fetch_one): %s with params: %s", sql, params)
+        if params:
+            cursor.execute(sql, params)
+        else:
+            cursor.execute(sql)
+        row = cursor.fetchone()
+        if row is None:
+            return None
+        return dict(row)
+    except sqlite3.DatabaseError:
+        logger.exception("Database query failed (fetch_one).")
+        raise
+    finally:
+        cursor.close()
+
+
+def fetch_all(
+    sql: str, params: Optional[Union[Tuple[Any, ...], Dict[str, Any]]] = None
+) -> List[Dict[str, Any]]:
+    """Execute a SQL query and return all resulting rows.
+
+    The database layer does not interpret or post-process results. Ordering,
+    grouping, and semantic meaning are the responsibility of the caller.
+
+    Args:
+        sql: The SQL SELECT statement to execute.
+        params: Optional positional or named parameters for the SQL statement.
+
+    Returns:
+        A list of rows represented as mappings. The list may be empty.
+
+    Raises:
+        sqlite3.DatabaseError: If execution fails for any reason.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        logger.debug("Executing SQL (fetch_all): %s with params: %s", sql, params)
+        if params:
+            cursor.execute(sql, params)
+        else:
+            cursor.execute(sql)
+        rows = cursor.fetchall()
+        return [dict(row) for row in rows]
+    except sqlite3.DatabaseError:
+        logger.exception("Database query failed (fetch_all).")
+        raise
+    finally:
+        cursor.close()
 
 
 def db_get_connection() -> sqlite3.Connection:
