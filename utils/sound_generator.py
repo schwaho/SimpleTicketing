@@ -12,6 +12,7 @@ Notes:
     - Designed for offline sound generation rather than real-time audio.
 """
 
+from typing import cast
 import numpy as np
 from scipy.io.wavfile import write
 from scipy.signal import butter, filtfilt
@@ -24,7 +25,7 @@ FS = 44100  # Sample rate
 
 def optimize_zero_dc(
     wave: np.ndarray, attack: int, release: int, alpha: float = 1.0, beta: float = 1.0
-) -> NDArray[np.floating]:
+) -> NDArray[np.float64]:
     """
     Optimizes DC offset and edge behavior of an audio signal.
 
@@ -73,7 +74,7 @@ def optimize_zero_dc(
     print(f"Scale factor: {scale}")
 
     wave_opt = wave * scale + shift
-    return wave_opt
+    return cast(NDArray[np.float64], wave_opt)
 
 
 def lowpass(signal: np.ndarray, cutoff: float, fs: int, order: int = 4) -> np.ndarray:
@@ -119,7 +120,7 @@ def piezo_beep(
     attack_ms: int = 10,
     release_ms: int = 40,
     cutoff: float = 4000,
-) -> NDArray[np.floating]:
+) -> NDArray[np.float64]:
     """
     Generate a smoothed piezo-style beep signal with click reduction.
 
