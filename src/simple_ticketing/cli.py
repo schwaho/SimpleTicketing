@@ -7,7 +7,8 @@ import logging
 import shutil
 from importlib import resources
 import typer as typer_module
-from simple_ticketing.database import db_init, db_clear
+from simple_ticketing.database import open_connection, close_connection, transaction, db_clear
+from simple_ticketing.db_schema import create_all_tables
 from simple_ticketing.cert import create_ca, create_signed_certificate
 
 app = typer_module.Typer()
@@ -62,6 +63,7 @@ def init() -> None:
     instance_dir = os.path.join("instance")
     data_dir = os.path.join(instance_dir, "data")
     structur = ["qr_codes", "tickets", "pdf", "tmp"]
+    database_path = os.path.join("instance", "data", "tickets.db")
 
     if not os.path.exists(data_dir):
         for path in structur:
@@ -72,8 +74,11 @@ def init() -> None:
 
         copy_examples(instance_dir)
 
-        db_init()
-        logger.info("Database has been created.")
+        open_connection(database_path)
+        with transaction():
+            create_all_tables()
+            logger.info("Database has been created.")
+        close_connection()
 
         ca_cert, ca_key = create_ca()
         create_signed_certificate(ca_cert, ca_key)
