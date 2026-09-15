@@ -3,7 +3,7 @@ from pypika import Table, Field
 from pypika.dialects import SQLLiteQuery as Query
 from simple_ticketing import database
 from simple_ticketing.models import BaseDomainRecord
-from simple_ticketing.repository_mapping import row_to_record, rows_to_records, named_placeholders
+from simple_ticketing.repository.mapping import row_to_record, rows_to_records, named_parameter
 
 T = TypeVar("T", bound="BaseDomainRecord")
 U = TypeVar("U", bound="BaseDomainRecord")
@@ -31,7 +31,8 @@ class DataRepository(Generic[T]):
         record_dict = record.as_dict()
         record_dict.pop("id", None)
 
-        bindings = named_placeholders(record_dict)
+        bindings = named_parameter(record_dict)
+        print(bindings)
 
         query = Query.into(self._table).columns(*bindings.keys()).insert(*bindings.values())
 
@@ -46,7 +47,7 @@ class DataRepository(Generic[T]):
         """
         record_dict = record.as_dict()
 
-        bindings = named_placeholders(record_dict, exclude_id=True)
+        bindings = named_parameter(record_dict, exclude_id=True)
 
         query = Query.update(self._table)
         for col, val in bindings.items():
