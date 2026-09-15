@@ -28,6 +28,7 @@ dependencies = [
     "dnspython",
     "colorlog",
     "python-dateutil",
+    "pypika",
 ]
 
 [project.optional-dependencies]
