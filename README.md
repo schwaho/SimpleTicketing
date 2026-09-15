@@ -56,6 +56,11 @@ git clone git@github.com:schwaho/SimpleTicketing.git
 cd SimpleTicketing
 ```
 
+If you want a known working state, check out the latest release tag (e.g. `v0.1.0`).
+```bash
+git checkout -b main-v0.1.0 v0.1.0
+```
+
 #### 2. Create a virtual environment
 
 ```bash
