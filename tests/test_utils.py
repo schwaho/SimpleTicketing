@@ -1,5 +1,5 @@
 """
-Unit tests for the `simple_ticketing.utils` module.
+Unit tests for the `SimpleTicketing.utils` module.
 """
 
 import ntpath
@@ -7,7 +7,7 @@ from unittest import mock
 from typing import Dict, Any
 import yaml
 import pytest
-from simple_ticketing.utils import (
+from SimpleTicketing.utils import (
     check_path,
     get_file_name,
     load_mail_config,

@@ -7,9 +7,9 @@ import logging
 import shutil
 from importlib import resources
 import typer as typer_module
-from simple_ticketing.database import open_connection, close_connection, db_clear
-from simple_ticketing.db_schema import create_all_tables
-from simple_ticketing.cert import create_ca, create_signed_certificate
+from SimpleTicketing.database import open_connection, close_connection, db_clear
+from SimpleTicketing.db_schema import create_all_tables
+from SimpleTicketing.cert import create_ca, create_signed_certificate
 
 app = typer_module.Typer()
 
@@ -39,7 +39,7 @@ def safe_remove(path: str) -> None:
 
 def copy_examples(instance_dir: str) -> None:
     """Copy example config files into instance directory"""
-    with resources.as_file(resources.files("simple_ticketing").joinpath("examples")) as examples:
+    with resources.as_file(resources.files("SimpleTicketing").joinpath("examples")) as examples:
 
         if not examples.is_dir():
             logger.warning("Examples directory does not exist in package.")

@@ -109,17 +109,17 @@ When working directly from the repository, the CLI can be executed via the modul
 
 Initialize a new instance:
 ```bash
-python -m simple_ticketing.cli init
+python -m SimpleTicketing.cli init
 ```
 
 Delete ticket data:
 ```bash
-python -m simple_ticketing.cli clean
+python -m SimpleTicketing.cli clean
 ```
 
 Reset the entire instance:
 ```bash
-python -m simple_ticketing.cli reset
+python -m SimpleTicketing.cli reset
 ```
 
 ### Application Mode (Web API & Frontend)
@@ -127,7 +127,7 @@ python -m simple_ticketing.cli reset
 To start the web application (Flask API and frontend), run:
 
 ```bash
-python -m simple_ticketing
+python -m SimpleTicketing
 ```
 
 > Note:

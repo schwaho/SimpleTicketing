@@ -13,11 +13,11 @@ import importlib.resources
 from logging.handlers import TimedRotatingFileHandler
 import colorlog
 from flask import Flask
-from simple_ticketing.extensions import mail
-from simple_ticketing.email_operations import init_flask_mail
-import simple_ticketing.cli as typer_module
-from simple_ticketing.api_routes import api
-from simple_ticketing.frontend_routes import frontend
+from SimpleTicketing.extensions import mail
+from SimpleTicketing.email_operations import init_flask_mail
+import SimpleTicketing.cli as typer_module
+from SimpleTicketing.api_routes import api
+from SimpleTicketing.frontend_routes import frontend
 
 __version__ = importlib.metadata.version("SimpleTicketing")
 
@@ -35,7 +35,7 @@ def setup_logging(
     Args:
         log_file (Optional[str]): Path to the log file. If None, default is 'app.log'.
         flask_level (int): Logging level for Flask.
-        simple_ticketing_level (int): Logging level for simple_ticketing.
+        simple_ticketing_level (int): Logging level for SimpleTicketing.
     """
     log_file = log_file or os.path.join("instance", "SimpleTicketing.log")
 
@@ -72,9 +72,9 @@ def setup_logging(
     root_logger.addHandler(console_handler)
     root_logger.addHandler(file_handler)
 
-    # Flask and simple_ticketing use the same logging config
+    # Flask and SimpleTicketing use the same logging config
     logging.getLogger("werkzeug").setLevel(flask_level)
-    logging.getLogger("simple_ticketing").setLevel(simple_ticketing_level)
+    logging.getLogger("SimpleTicketing").setLevel(simple_ticketing_level)
 
     # Error handling in logging
     try:
@@ -100,8 +100,8 @@ def create_app() -> Flask:
     Returns:
         Flask: The configured Flask application instance.
     """
-    templates_path = str(importlib.resources.files("simple_ticketing").joinpath("templates"))
-    static_path = str(importlib.resources.files("simple_ticketing").joinpath("static"))
+    templates_path = str(importlib.resources.files("SimpleTicketing").joinpath("templates"))
+    static_path = str(importlib.resources.files("SimpleTicketing").joinpath("static"))
     instance_path = str(os.path.join(Path.cwd(), "instance"))
 
     logger.info("Initialize Flask")

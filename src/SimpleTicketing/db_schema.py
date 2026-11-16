@@ -11,7 +11,7 @@ It does not perform schema validation, migrations, or enforce business logic.
 
 import logging
 from typing import Mapping
-from simple_ticketing.database import execute, transaction
+from SimpleTicketing.database import execute, transaction
 
 logger = logging.getLogger(__name__)
 
