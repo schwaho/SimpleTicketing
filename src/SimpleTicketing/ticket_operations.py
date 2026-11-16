@@ -30,14 +30,14 @@ All functions include logging for:
 import logging
 import uuid
 from typing import List, Dict, Any, Optional, Tuple, cast
-from simple_ticketing.database import db_fetch_tickets, db_commit_ticket
-from simple_ticketing.ticket_image_generator import (
+from SimpleTicketing.database import db_fetch_tickets, db_commit_ticket
+from SimpleTicketing.ticket_image_generator import (
     create_qr_code,
     create_ticket_image,
     save_ticket_image,
 )
-from simple_ticketing.ticket_pdf_generator import create_ticket_pdf
-from simple_ticketing.utils import (
+from SimpleTicketing.ticket_pdf_generator import create_ticket_pdf
+from SimpleTicketing.utils import (
     load_config,
     validate_config,
     is_none_or_empty,

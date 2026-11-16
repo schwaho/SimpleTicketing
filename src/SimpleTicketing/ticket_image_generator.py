@@ -23,7 +23,7 @@ import qrcode
 import qrcode.exceptions
 from PIL import Image, ImageDraw, ImageFont
 from flask import current_app
-from simple_ticketing.utils import load_config, validate_config
+from SimpleTicketing.utils import load_config, validate_config
 
 logger = logging.getLogger(__name__)
 FontType = Union[ImageFont.FreeTypeFont, ImageFont.ImageFont]

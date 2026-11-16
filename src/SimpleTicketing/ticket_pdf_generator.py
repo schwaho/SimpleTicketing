@@ -16,7 +16,7 @@ from reportlab.lib import pagesizes
 from reportlab.pdfgen import canvas
 from PIL import Image
 from flask import current_app
-from simple_ticketing.utils import load_config, validate_config
+from SimpleTicketing.utils import load_config, validate_config
 
 logger = logging.getLogger(__name__)
 

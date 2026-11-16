@@ -41,14 +41,14 @@ from typing import Union, Tuple, Dict, List, Any, Optional
 import importlib.metadata
 from flask import Blueprint, request, jsonify, Response, Request, send_file
 from flask_mail import BadHeaderError
-from simple_ticketing.utils import (
+from SimpleTicketing.utils import (
     validate_email,
     check_ticket_img_path,
     is_none_or_empty,
     remove_none_from_dict,
 )
-from simple_ticketing.email_operations import send_simple_mail, send_tickets
-from simple_ticketing.ticket_operations import (
+from SimpleTicketing.email_operations import send_simple_mail, send_tickets
+from SimpleTicketing.ticket_operations import (
     list_tickets as get_all_tickets_from_db,
     list_hidden_tickets as list_hidden_tickets_in_db,
     create_tickets as create_tickets_data,
